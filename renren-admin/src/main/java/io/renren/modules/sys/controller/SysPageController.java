@@ -60,4 +60,7 @@ public class SysPageController {
 		return "404";
 	}
 
+	@RequestMapping("webSocket.html")
+	public String webSocket(){ return "webSocket";}
+
 }
