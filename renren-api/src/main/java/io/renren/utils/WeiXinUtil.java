@@ -35,7 +35,7 @@ public class WeiXinUtil {
     private static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?"
             + "grant_type=client_credential&appid=APPID&secret=APPSECRET";
 
-    private static final String REDIS_ACCESS_TOKEN = "access_token";
+    private static final String REDIS_ACCESS_TOKEN = "accessToken";
 
     private static Logger logger = LoggerFactory.getLogger(WeiXinUtil.class);
 

@@ -53,10 +53,11 @@ public class WxTestController {
         String fromUserName = map.get("FromUserName");
         String msgType = map.get("MsgType");
         String content = map.get("Content");
+        String event = map.get("Event");
         //处理文本类型，实现输入1，回复相应的封装的内容
         String message="";
+        TextMessageUtil textMessage = new TextMessageUtil();
         if("text".equals(msgType)){
-            TextMessageUtil textMessage = new TextMessageUtil();
             if("1".equals(content)){
                 message = textMessage.initMessage(fromUserName, toUserName);
             }else if(XJJ.equals(content)){
@@ -64,6 +65,12 @@ public class WxTestController {
                 message = util.initMessage(fromUserName, toUserName);
             }else {
                 message = textMessage.initMessage(fromUserName, toUserName,content);
+            }
+        }else if("event".equals(msgType)){
+            if(event.equals("subscribe")){
+                message = textMessage.initMessage(fromUserName, toUserName,"欢迎关注本公众号");
+            }else{
+                logger.debug("{}用户已经取消关注",fromUserName);
             }
         }
 
