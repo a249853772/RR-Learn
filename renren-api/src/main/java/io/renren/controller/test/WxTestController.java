@@ -41,6 +41,7 @@ public class WxTestController {
         if(SignUtil.checkSignature(signature, timestamp, nonce)){
             logger.info("校验成功");
             return echostr;
+
         }
         return "null";
     }
