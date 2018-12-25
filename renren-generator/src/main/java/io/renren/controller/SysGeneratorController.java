@@ -59,9 +59,9 @@ public class SysGeneratorController {
 		byte[] data = sysGeneratorService.generatorCode(tableNames);
 		
 		response.reset();  
-        response.setHeader("Content-Disposition", "attachment; filename=\"renren.zip\"");  
-        response.addHeader("Content-Length", "" + data.length);  
-        response.setContentType("application/octet-stream; charset=UTF-8");  
+        response.setHeader("Content-Disposition", "attachment; filename=\"renren.zip\"");
+        response.addHeader("Content-Length", "" + data.length);
+        response.setContentType("application/octet-stream; charset=UTF-8");
   
         IOUtils.write(data, response.getOutputStream());  
 	}
