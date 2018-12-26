@@ -44,7 +44,7 @@ function getServer() {
     }else {
         console.log("您的浏览器支持WebSocket");
         //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
-        socket = new WebSocket("ws://localhost:8080/renren-admin/chatServer");
+        socket = new WebSocket("ws://jxwkjr.natappfree.cc/renren-admin/websocket");
         //打开事件
         socket.onopen = function() {
             vm.ConnectionState = true;

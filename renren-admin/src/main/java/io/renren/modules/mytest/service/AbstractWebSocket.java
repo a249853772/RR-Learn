@@ -103,7 +103,7 @@ public abstract class AbstractWebSocket<T> {
             throw new RuntimeException("sys error");
         }
         this.session = session;
-        webSocketContainer.getContainer().add(this);
+        webSocketContainer.add(this);
         logger.info("当前"+this.getClass().getSimpleName()+"socket数:" + webSocketContainer.getCount());
         connStartAndDo();
     }
