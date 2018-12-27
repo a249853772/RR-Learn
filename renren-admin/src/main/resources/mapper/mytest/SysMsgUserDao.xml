@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.mytest.dao.SysMsgUserDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.mytest.entity.SysMsgUserEntity" id="sysMsgUserMap">
+        <result property="id" column="id"/>
+        <result property="sysMsgId" column="sys_msg_id"/>
+        <result property="sysUserId" column="sys_user_id"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+
+</mapper>
