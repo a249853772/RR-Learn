@@ -19,6 +19,8 @@ package io.renren.modules.sys.dao;
 import io.renren.modules.sys.entity.SysDictEntity;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * 数据字典
  *
@@ -26,5 +28,12 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @since 3.1.0 2018-01-27
  */
 public interface SysDictDao extends BaseMapper<SysDictEntity> {
+
+    /**
+     * 根据id查询所有子类型字典项
+     * @param id
+     * @return
+     */
+    List<SysDictEntity> selectAllByTypeIncludeSon(Long id);
 	
 }

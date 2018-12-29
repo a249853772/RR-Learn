@@ -109,4 +109,22 @@ public class Constant {
         }
     }
 
+    public enum DictType {
+        /**
+         * 消息类型
+         */
+        MSG(7L,"msg");
+
+        private Long id;
+        private String type;
+
+        DictType(Long id,String type){
+            this.id = id;
+            this.type = type;
+        }
+        public Long getId() {
+            return id;
+        }
+    }
+
 }

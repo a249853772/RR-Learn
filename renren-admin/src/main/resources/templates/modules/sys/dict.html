@@ -65,6 +65,13 @@
                             <input type="text" class="form-control" v-model="dict.remark" placeholder="备注"/>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">所属父字典类型</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" style="cursor:pointer;" v-model="dict.parentName" @click="dictTree" readonly="readonly" placeholder="所属父字典类型"/>
+                            <input type="hidden"  v-model="dict.parentId" />
+                        </div>
+                    </div>
 							            <div class="form-group">
                 <div class="col-sm-2 control-label"></div>
                 <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
@@ -72,6 +79,11 @@
             </div>
         </form>
     </div>
+</div>
+
+<!-- 选择父字典类型 -->
+<div id="dictLayer" style="display: none;padding:10px;">
+    <ul id="dictTree" class="ztree"></ul>
 </div>
 
 <script src="${request.contextPath}/statics/js/modules/sys/dict.js?_${.now?long}"></script>

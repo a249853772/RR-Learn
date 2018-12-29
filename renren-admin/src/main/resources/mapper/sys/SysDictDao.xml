@@ -2,6 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.renren.modules.sys.dao.SysDictDao">
+    
+    <resultMap id="baseMap" type="io.renren.modules.sys.entity.SysDictEntity">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="code" column="code"/>
+        <result property="value" column="value"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="remark" column="remark"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="parentName" column="parentName"/>
+    </resultMap>
 
 
+    <select id="selectAllByTypeIncludeSon" parameterType="long" resultType="io.renren.modules.sys.entity.SysDictEntity">
+        SELECT d.*,di.`value` AS parentName
+        FROM sys_dict d
+            LEFT JOIN sys_dict di
+                ON d.parent_id = di.id
+        WHERE FIND_IN_SET(d.id,queryDictAllChild(#{id}))
+    </select>
 </mapper>

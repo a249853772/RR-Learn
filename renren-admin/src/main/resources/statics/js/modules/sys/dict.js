@@ -8,7 +8,8 @@ $(function () {
 			{ label: '字典码', name: 'code', index: 'code', width: 80 }, 			
 			{ label: '字典值', name: 'value', index: 'value', width: 80 }, 			
 			{ label: '排序', name: 'orderNum', index: 'order_num', width: 80 }, 			
-			{ label: '备注', name: 'remark', index: 'remark', width: 80 }
+			{ label: '备注', name: 'remark', index: 'remark', width: 80 },
+            { label: '所属父字典类型', name: 'parentName', index: '', width: 80 }
 		],
 		viewrecords: true,
         height: 385,
@@ -37,6 +38,21 @@ $(function () {
     });
 });
 
+var setting = {
+    data: {
+        simpleData: {
+            enable: true,
+            idKey: "id",
+            pIdKey: "parentId",
+            rootPId: -1
+        },
+        key: {
+            url:"nourl"
+        }
+    }
+};
+var ztree;
+
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
@@ -54,8 +70,21 @@ var vm = new Vue({
 		add: function(){
 			vm.showList = false;
 			vm.title = "新增";
-			vm.dict = {};
+			vm.dict = {parentId:null};
+			vm.getDict();
 		},
+		getDict:function () {
+			$.get(baseURL+"sys/dict/treeList",function (r) {
+                console.log(JSON.stringify(r));
+                ztree = $.fn.zTree.init($("#dictTree"), setting, r);
+                var node = ztree.getNodeByParam("id", vm.dict.id);
+                if(node != null){
+                    ztree.selectNode(node);
+
+                    vm.dict.parentId = node.id;
+                }
+            });
+        },
 		update: function (event) {
 			var id = getSelectedRow();
 			if(id == null){
@@ -63,8 +92,8 @@ var vm = new Vue({
 			}
 			vm.showList = false;
             vm.title = "修改";
-            
-            vm.getInfo(id)
+            vm.getInfo(id);
+            vm.getDict();
 		},
 		saveOrUpdate: function (event) {
 			var url = vm.dict.id == null ? "sys/dict/save" : "sys/dict/update";
@@ -84,6 +113,26 @@ var vm = new Vue({
 				}
 			});
 		},
+        dictTree: function(){
+            layer.open({
+                type: 1,
+                offset: '50px',
+                skin: 'layui-layer-molv',
+                title: "选择父字典类型",
+                area: ['300px', '450px'],
+                shade: 0,
+                shadeClose: false,
+                content: jQuery("#dictLayer"),
+                btn: ['确定', '取消'],
+                btn1: function (index) {
+                    var node = ztree.getSelectedNodes();
+                    //选择上级部门
+                    vm.dict.parentId = node[0].id;
+					vm.dict.parentName = node[0].name;
+                    layer.close(index);
+                }
+            });
+        },
 		del: function (event) {
 			var ids = getSelectedRows();
 			if(ids == null){

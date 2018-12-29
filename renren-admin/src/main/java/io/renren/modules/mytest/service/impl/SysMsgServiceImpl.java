@@ -18,11 +18,13 @@ public class SysMsgServiceImpl extends ServiceImpl<SysMsgDao, SysMsgEntity> impl
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        Page<SysMsgEntity> page = this.selectPage(
-                new Query<SysMsgEntity>(params).getPage(),
-                new EntityWrapper<SysMsgEntity>()
-        );
-
+//        Page<SysMsgEntity> page = this.selectPage(
+//                new Query<SysMsgEntity>(params).getPage(),
+//                new EntityWrapper<SysMsgEntity>()
+//        );
+        Page<SysMsgEntity> page = new Query<SysMsgEntity>(params)
+                .getPage();
+        page.setRecords(this.baseMapper.selectListSelective(page));
         return new PageUtils(page);
     }
 

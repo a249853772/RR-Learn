@@ -16,6 +16,8 @@
 
 package io.renren.modules.sys.controller;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.renren.common.utils.Constant;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.R;
 import io.renren.common.validator.ValidatorUtils;
@@ -25,7 +27,9 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,6 +55,45 @@ public class SysDictController {
         return R.ok().put("page", page);
     }
 
+    @RequestMapping("/treeList")
+    @RequiresPermissions("sys:dict:list")
+    public List<R> getDictTree(){
+        List<R> rs = new ArrayList<>();
+        List<SysDictEntity> list = sysDictService.selectList(new EntityWrapper<>());
+        for (SysDictEntity s:list
+             ) {
+            rs.add(putTreeData(s));
+        }
+        return rs;
+    }
+
+    private R putTreeData(SysDictEntity s){
+        R r = new R();
+        r.put("parentId",s.getParentId());
+        r.put("name",s.getValue());
+        r.put("id",s.getId());
+        r.put("open",s.getOpen());
+        r.put("list",s.getList());
+        if(s.getParentId()!=null&&s.getParentId()!=0){
+            r.put("parentName",sysDictService.selectById(s.getParentId()).getParentName());
+        }else{
+            r.put("parentName",null);
+        }
+        return  r;
+    }
+
+    @RequestMapping("/msgTreeList")
+    @RequiresPermissions("sys:dict:list")
+    public List<R> getMsgDictTree(){
+        List<R> rs = new ArrayList<>();
+        List<SysDictEntity> list = sysDictService.selectAllByTypeIncludeSon(Constant.DictType.MSG.getId());
+        for (SysDictEntity s: list
+             ) {
+            rs.add(putTreeData(s));
+        }
+        return rs;
+    }
+
 
     /**
      * 信息
@@ -59,7 +102,10 @@ public class SysDictController {
     @RequiresPermissions("sys:dict:info")
     public R info(@PathVariable("id") Long id){
         SysDictEntity dict = sysDictService.selectById(id);
-
+        SysDictEntity parent = sysDictService.selectById(dict.getParentId());
+        if(parent!=null){
+            dict.setParentName(parent.getValue());
+        }
         return R.ok().put("dict", dict);
     }
 

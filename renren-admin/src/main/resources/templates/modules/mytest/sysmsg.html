@@ -25,10 +25,17 @@
     <div v-show="!showList" class="panel panel-default">
         <div class="panel-heading">{{title}}</div>
         <form class="form-horizontal">
-														                    <div class="form-group">
+                    <!--<div class="form-group">
                         <div class="col-sm-2 control-label">消息类型</div>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" v-model="sysMsg.msgType" placeholder="消息类型"/>
+                        </div>
+                    </div>-->
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">所属消息类型</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" style="cursor:pointer;" v-model="sysMsg.msgTypeName" @click="msgTypeTree" readonly="readonly" placeholder="所属消息类型"/>
+                            <input type="hidden"  v-model="sysMsg.msgType" />
                         </div>
                     </div>
 											                    <div class="form-group">
@@ -69,7 +76,10 @@
         </form>
     </div>
 </div>
-
+<!-- 选择消息类型 -->
+<div id="dictLayer" style="display: none;padding:10px;">
+    <ul id="dictTree" class="ztree"></ul>
+</div>
 <script src="${request.contextPath}/statics/js/modules/mytest/sysmsg.js?_${.now?long}"></script>
 </body>
 </html>

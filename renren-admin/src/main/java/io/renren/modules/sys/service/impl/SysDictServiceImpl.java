@@ -27,6 +27,7 @@ import io.renren.modules.sys.service.SysDictService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -42,8 +43,18 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictDao, SysDictEntity> i
                 new EntityWrapper<SysDictEntity>()
                     .like(StringUtils.isNotBlank(name),"name", name)
         );
-
+        for (SysDictEntity dict:page.getRecords()
+             ) {
+            SysDictEntity parent =selectById(dict.getParentId());
+            if(parent!=null){
+                dict.setParentName(parent.getValue());
+            }
+        }
         return new PageUtils(page);
     }
 
+    @Override
+    public List<SysDictEntity> selectAllByTypeIncludeSon(Long id) {
+        return this.baseMapper.selectAllByTypeIncludeSon(id);
+    }
 }

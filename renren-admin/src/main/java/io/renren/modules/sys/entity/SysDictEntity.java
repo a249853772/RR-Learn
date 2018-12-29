@@ -16,12 +16,14 @@
 
 package io.renren.modules.sys.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableLogic;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 数据字典
@@ -68,6 +70,51 @@ public class SysDictEntity implements Serializable {
 	 */
 	@TableLogic
 	private Integer delFlag;
+
+	private Long parentId;
+
+	@TableField(exist = false)
+	private String parentName;
+
+	/**
+	 * ztree属性
+	 */
+	@TableField(exist=false)
+	private Boolean open;
+	@TableField(exist=false)
+	private List<?> list;
+
+	public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+
+	public Boolean getOpen() {
+		return open;
+	}
+
+	public void setOpen(Boolean open) {
+		this.open = open;
+	}
+
+	public List<?> getList() {
+		return list;
+	}
+
+	public void setList(List<?> list) {
+		this.list = list;
+	}
+
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
 
 	/**
 	 * 设置：

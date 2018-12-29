@@ -12,7 +12,45 @@
         <result property="createtime" column="createtime"/>
         <result property="updatetime" column="updatetime"/>
         <result property="uploaderId" column="uploader_id"/>
+        <result property="uploaderName" column="username"/>
+        <result property="typeName" column="typeName"/>
     </resultMap>
+    <sql id="fieldQuery">
+        SELECT m.*,u.username,d.value AS typeName
+        FROM sys_msg m
+            LEFT JOIN sys_user u
+                ON m.uploader_id = u.user_id
+            LEFT JOIN sys_dict d
+                ON m.msg_type = d.id
+    </sql>
+    <select id="selectListSelective" resultMap="sysMsgMap">
+        <include refid="fieldQuery"/>
+        where 1=1
+        <if test="id!=null">
+          AND id=#{id}
+        </if>
+        <if test="msgType!=null">
+            AND msg_type=#{msgType}
+        </if>
+        <if test="title!=null">
+            AND title=#{title}
+        </if>
+        <if test="text!=null">
+            AND text=#{text}
+        </if>
+        <if test="createtime!=null">
+            AND createtime=#{createtime}
+        </if>
+        <if test="updatetime!=null">
+            AND updatetime=#{updatetime}
+        </if>
+        <if test="uploaderId!=null">
+            AND uploader_id=#{uploaderId}
+        </if>
+        <if test="uploaderName!=null">
+            AND username=#{uploaderName}
+        </if>
+    </select>
 
 
 </mapper>

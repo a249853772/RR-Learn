@@ -1,5 +1,6 @@
 package io.renren.modules.mytest.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -47,7 +48,19 @@ public class SysMsgEntity implements Serializable {
 	 */
 	private Long uploaderId;
 
+	@TableField(exist = false)
 	private String uploaderName;
+
+	@TableField(exist = false)
+	private String typeName;
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
 
 	public String getUploaderName() {
 		return uploaderName;
