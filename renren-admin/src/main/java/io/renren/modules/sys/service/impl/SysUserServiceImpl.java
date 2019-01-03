@@ -82,6 +82,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	}
 
 	@Override
+	@DataFilter(subDept = true, user = false)
+	public List<SysUserEntity> getlist(Map<String, Object> params) {
+		return selectList(
+				new EntityWrapper<SysUserEntity>()
+						.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))
+		);
+	}
+
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void save(SysUserEntity user) {
 		user.setCreateTime(new Date());

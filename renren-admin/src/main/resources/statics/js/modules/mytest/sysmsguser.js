@@ -3,10 +3,16 @@ $(function () {
         url: baseURL + 'sys/sysmsguser/list',
         datatype: "json",
         colModel: [			
-			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
-			{ label: '系统消息id', name: 'sysMsgId', index: 'sys_msg_id', width: 80 }, 			
-			{ label: '用户id', name: 'sysUserId', index: 'sys_user_id', width: 80 }, 			
-			{ label: '状态  0：未读   1：已读', name: 'status', index: 'status', width: 80 }			
+			// { label: 'id', name: 'id', index: 'id', width: 50, key: true },
+			// { label: '系统消息id', name: 'sysMsgId', index: 'sys_msg_id', width: 80 },
+			// { label: '用户id', name: 'sysUserId', index: 'sys_user_id', width: 80 },
+            { label: '系统消息标题', name: 'msgTitle', index: '', width: 80 },
+            { label: '用户名', name: 'userName', index: '', width: 80 },
+            { label: '状态', name: 'status', index: 'status', width: 80,formatter: function(value, options, row){
+                    return value === 0 ?
+                        '<span class="label label-danger">未读</span>' :
+                        '<span class="label label-success">已读</span>';
+                } }
         ],
 		viewrecords: true,
         height: 385,
@@ -35,12 +41,31 @@ $(function () {
     });
 });
 
+var setting = {
+    data: {
+        simpleData: {
+            enable: true,
+            idKey: "id",
+            pIdKey: "parentId",
+            rootPId: -1
+        },
+        key: {
+            url:"nourl"
+        }
+    }
+};
+var ztree;
+var userTree;
+
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
 		showList: true,
 		title: null,
-		sysMsgUser: {}
+		sysMsgUser: {
+            msgName:null,
+            userName:null
+		}
 	},
 	methods: {
 		query: function () {
@@ -49,8 +74,32 @@ var vm = new Vue({
 		add: function(){
 			vm.showList = false;
 			vm.title = "新增";
-			vm.sysMsgUser = {};
+			vm.sysMsgUser = { msgName:null,userName:null};
+            vm.getMsgTree();
+            vm.getUserTree();
 		},
+        getMsgTree:function () {
+            $.get(baseURL+"sys/sysmsg/getMsgTree",function (r) {
+                console.log(JSON.stringify(r));
+                ztree = $.fn.zTree.init($("#dictTree"), setting, r);
+                var node = ztree.getNodeByParam("id", vm.sysMsgUser.sysMsgId);
+                if(node != null){
+                    ztree.selectNode(node);
+                    vm.sysMsgUser.sysMsgId = node.id;
+                }
+            });
+        },
+        getUserTree:function () {
+            $.get(baseURL+"sys/user/getUserTree",function (r) {
+                console.log(JSON.stringify(r));
+                userTree = $.fn.zTree.init($("#userTree"), setting, r);
+                var node = userTree.getNodeByParam("id", vm.sysMsgUser.sysUserId);
+                if(node != null){
+                    userTree.selectNode(node);
+                    vm.sysMsgUser.sysUserId = node.id;
+                }
+            });
+        },
 		update: function (event) {
 			var id = getSelectedRow();
 			if(id == null){
@@ -59,7 +108,9 @@ var vm = new Vue({
 			vm.showList = false;
             vm.title = "修改";
             
-            vm.getInfo(id)
+            vm.getInfo(id);
+            vm.getMsgTree();
+            vm.getUserTree();
 		},
 		saveOrUpdate: function (event) {
 			var url = vm.sysMsgUser.id == null ? "sys/sysmsguser/save" : "sys/sysmsguser/update";
@@ -79,6 +130,46 @@ var vm = new Vue({
 				}
 			});
 		},
+        msgTree:function () {
+            layer.open({
+                type: 1,
+                offset: '50px',
+                skin: 'layui-layer-molv',
+                title: "选择消息类型",
+                area: ['300px', '450px'],
+                shade: 0,
+                shadeClose: false,
+                content: jQuery("#dictLayer"),
+                btn: ['确定', '取消'],
+                btn1: function (index) {
+                    var node = ztree.getSelectedNodes();
+                    //选择上级部门
+                    vm.sysMsgUser.sysMsgId = node[0].id;
+                    vm.sysMsgUser.msgName = node[0].name;
+                    layer.close(index);
+                }
+            });
+        },
+        userTree:function () {
+            layer.open({
+                type: 1,
+                offset: '50px',
+                skin: 'layui-layer-molv',
+                title: "选择消息类型",
+                area: ['300px', '450px'],
+                shade: 0,
+                shadeClose: false,
+                content: jQuery("#userLayer"),
+                btn: ['确定', '取消'],
+                btn1: function (index) {
+                    var node = userTree.getSelectedNodes();
+                    //选择上级部门
+                    vm.sysMsgUser.sysUserId = node[0].id;
+                    vm.sysMsgUser.userName = node[0].name;
+                    layer.close(index);
+                }
+            });
+        },
 		del: function (event) {
 			var ids = getSelectedRows();
 			if(ids == null){

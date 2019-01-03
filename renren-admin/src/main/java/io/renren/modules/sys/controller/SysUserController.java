@@ -24,7 +24,9 @@ import io.renren.common.validator.Assert;
 import io.renren.common.validator.ValidatorUtils;
 import io.renren.common.validator.group.AddGroup;
 import io.renren.common.validator.group.UpdateGroup;
+import io.renren.modules.sys.entity.SysDeptEntity;
 import io.renren.modules.sys.entity.SysUserEntity;
+import io.renren.modules.sys.service.SysDeptService;
 import io.renren.modules.sys.service.SysUserRoleService;
 import io.renren.modules.sys.service.SysUserService;
 import io.renren.modules.sys.shiro.ShiroUtils;
@@ -33,9 +35,8 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 系统用户
@@ -51,7 +52,9 @@ public class SysUserController extends AbstractController {
 	private SysUserService sysUserService;
 	@Autowired
 	private SysUserRoleService sysUserRoleService;
-	
+	@Autowired
+	private SysDeptService sysDeptService;
+
 	/**
 	 * 所有用户列表
 	 */
@@ -61,6 +64,39 @@ public class SysUserController extends AbstractController {
 		PageUtils page = sysUserService.queryPage(params);
 
 		return R.ok().put("page", page);
+	}
+
+	/**
+	 * 所有用户列表
+	 */
+	@RequestMapping("/getUserTree")
+	@RequiresPermissions("sys:user:list")
+	public List<R> getUserTree(){
+		List<R> rs = new ArrayList<>();
+		List<SysUserEntity> sysUserEntities = sysUserService.getlist(new HashMap<>());
+		for (SysUserEntity user:sysUserEntities
+			 ) {
+			R r = new R();
+			r.put("parentId",user.getDeptId()+"d");
+			r.put("name",user.getUsername());
+			r.put("id",user.getUserId());
+			r.put("open",true);
+			r.put("list",null);
+			rs.add(r);
+		}
+		Map<Long,List<SysUserEntity>> map = sysUserEntities.stream().collect(Collectors.groupingBy(SysUserEntity::getDeptId));
+		for (Long deptId:map.keySet()
+			 ) {
+			SysDeptEntity deptEntity = sysDeptService.selectById(deptId);
+			R r = new R();
+			r.put("parentId",deptEntity.getParentId()+"d");
+			r.put("name",deptEntity.getName());
+			r.put("id",deptEntity.getDeptId()+"d");
+			r.put("open",true);
+			r.put("list",null);
+			rs.add(r);
+		}
+		return rs;
 	}
 	
 	/**

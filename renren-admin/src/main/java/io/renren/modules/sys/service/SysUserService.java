@@ -34,6 +34,8 @@ import java.util.Map;
 public interface SysUserService extends IService<SysUserEntity> {
 
 	PageUtils queryPage(Map<String, Object> params);
+
+	List<SysUserEntity> getlist(Map<String, Object> params);
 	
 	/**
 	 * 查询用户的所有菜单ID

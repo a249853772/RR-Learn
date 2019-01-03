@@ -25,24 +25,41 @@
     <div v-show="!showList" class="panel panel-default">
         <div class="panel-heading">{{title}}</div>
         <form class="form-horizontal">
-														                    <div class="form-group">
-                        <div class="col-sm-2 control-label">系统消息id</div>
+														                    <!--<div class="form-group">-->
+                        <!--<div class="col-sm-2 control-label">系统消息id</div>-->
+                        <!--<div class="col-sm-10">-->
+                            <!--<input type="text" class="form-control" v-model="sysMsgUser.sysMsgId" placeholder="系统消息id"/>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">消息标题</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="sysMsgUser.sysMsgId" placeholder="系统消息id"/>
+                            <input type="text" class="form-control" style="cursor:pointer;" v-model="sysMsgUser.msgName" @click="msgTree" readonly="readonly" placeholder="消息标题"/>
+                            <input type="hidden"  v-model="sysMsgUser.sysMsgId" />
                         </div>
                     </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">用户id</div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">用户名称</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="sysMsgUser.sysUserId" placeholder="用户id"/>
+                            <input type="text" class="form-control" style="cursor:pointer;" v-model="sysMsgUser.userName" @click="userTree" readonly="readonly" placeholder="用户名"/>
+                            <input type="hidden"  v-model="sysMsgUser.sysUserId" />
                         </div>
                     </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">状态  0：未读   1：已读</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="sysMsgUser.status" placeholder="状态  0：未读   1：已读"/>
-                        </div>
-                    </div>
+
+											                    <!--<div class="form-group">-->
+                        <!--<div class="col-sm-2 control-label">用户id</div>-->
+                        <!--<div class="col-sm-10">-->
+                            <!--<input type="text" class="form-control" v-model="sysMsgUser.sysUserId" placeholder="用户id"/>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+
+											                    <!--<div class="form-group">-->
+                        <!--<div class="col-sm-2 control-label">状态  0：未读   1：已读</div>-->
+                        <!--<div class="col-sm-10">-->
+                            <!--<input type="text" class="form-control" v-model="sysMsgUser.status" placeholder="状态  0：未读   1：已读"/>-->
+                        <!--</div>-->
+                    <!--</div>-->
 							            <div class="form-group">
                 <div class="col-sm-2 control-label"></div>
                 <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
@@ -51,7 +68,14 @@
         </form>
     </div>
 </div>
-
+<!-- 选择消息 -->
+<div id="dictLayer" style="display: none;padding:10px;">
+    <ul id="dictTree" class="ztree"></ul>
+</div>
+<!-- 选择消息 -->
+<div id="userLayer" style="display: none;padding:10px;">
+    <ul id="userTree" class="ztree"></ul>
+</div>
 <script src="${request.contextPath}/statics/js/modules/mytest/sysmsguser.js?_${.now?long}"></script>
 </body>
 </html>

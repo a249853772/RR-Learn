@@ -1,5 +1,6 @@
 package io.renren.modules.mytest.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -34,6 +35,27 @@ public class SysMsgUserEntity implements Serializable {
 	 * 状态  0：未读   1：已读
 	 */
 	private Integer status;
+
+	@TableField(exist = false)
+	private String msgTitle;
+	@TableField(exist = false)
+	private String userName;
+
+	public String getMsgTitle() {
+		return msgTitle;
+	}
+
+	public void setMsgTitle(String msgTitle) {
+		this.msgTitle = msgTitle;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
 	/**
 	 * 设置：

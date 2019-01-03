@@ -1,7 +1,6 @@
 package io.renren.modules.mytest.service;
 
 
-import org.jboss.logging.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
